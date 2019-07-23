@@ -19,6 +19,7 @@ export let dom = {
     },
     init: function () {
         // This function should run once, when the page is loaded.
+
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
@@ -53,5 +54,8 @@ export let dom = {
         // shows the cards of a board
         // it adds necessary event listeners also
     },
+    theDragula: function () { // listOfDivsWithData as an argument //listOfDivsWithData == [document.getDocumentById(right), .....]
+        dragula([document.getElementById("left"), document.getElementById("right"),document.getElementById("middle")]);
+    }
     // here comes more features
 };

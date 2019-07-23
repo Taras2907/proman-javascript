@@ -7,7 +7,24 @@ classes
 .btn-primary{
     padding: 8px;
 }
-
+.wrapper{
+    padding: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.jumbotron{
+    background-color: darkgray;
+    padding-top: 20px;
+    padding-right: 10px;
+    width:80%;
+}
+.inner {
+    background-color: white;
+    height: 20%;
+    padding: 10px;
+    color: black;
+    text-align: center;
+}
 /*
 id
  */
