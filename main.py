@@ -63,14 +63,15 @@ def logout():
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
     if request.method == "POST":
-        is_in_database = user_is_in_database()
         user_name = request.form['user_name']
+        is_in_database = user_is_in_database(user_name)
         hashed_password = hash_password(request.form['password'])
         if is_in_database:
             user_name_already_exists = 'user_name_exists'
-            return render_template(url_for('registration'), user_name_already_exists=user_name_already_exists)
+            return render_template('registration.html', user_name_already_exists=user_name_already_exists)
         else:
             write_user_name_password_to_database(user_name, hashed_password)
+            return render_template('login.html')
     return render_template('registration.html')
 
 
