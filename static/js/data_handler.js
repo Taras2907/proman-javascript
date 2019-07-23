@@ -19,6 +19,14 @@ export let dataHandler = {
     _api_post: function (url, data, callback) {
         // it is not called from outside
         // sends the data to the API, and calls callback function
+        fetch(url, {
+            method: "POST",
+            headers:{'Content-Type':'application/json'},
+            credentials: 'same-origin',
+            body:JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(json_response => callback(json_response));
     },
     init: function () {
     },
@@ -34,24 +42,53 @@ export let dataHandler = {
     },
     getBoard: function (boardId, callback) {
         // the board is retrieved and then the callback function is called with the board
+        this._api_get('/get-board', (response) => {
+            this._data = response;
+            callback(response, boardId);
+        })
     },
     getStatuses: function (callback) {
         // the statuses are retrieved and then the callback function is called with the statuses
+        this._api_get('/get-statuses', (response)=>{
+            this._data = response;
+            callback(response);
+        })
     },
     getStatus: function (statusId, callback) {
         // the status is retrieved and then the callback function is called with the status
+        this._api_get('/get-status', (response)=>{
+            this._data = response;
+            callback(response);
+        })
     },
     getCardsByBoardId: function (boardId, callback) {
         // the cards are retrieved and then the callback function is called with the cards
+        this._api_get('/get-cards-by-boards-id', (response)=>{
+            this._data = response;
+            callback(response, boardId);
+        })
     },
     getCard: function (cardId, callback) {
         // the card is retrieved and then the callback function is called with the card
+        this._api_get('/get-card', (response)=>{
+            this._data = response;
+            callback(response, cardId);
+        })
     },
     createNewBoard: function (boardTitle, callback) {
         // creates new board, saves it and calls the callback function with its data
+        this._api_get('/create-new-board', (response)=>{
+            this._data = response;
+            callback(response, boardTitle);
+        })
+
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data
+        this._api_get('/create-new-card', (response)=>{
+            this._data = response;
+            callback(response, boardId, statusId);
+        })
     }
     // here comes more features
 };

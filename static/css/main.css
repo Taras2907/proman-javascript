@@ -1,3 +1,31 @@
+/*
+classes
+ */
+.container{
+    width: 35%;
+}
+
+/*
+id
+ */
 #boards {
     background-color: green;
+}
+
+#login-form, #registrationForm {
+    margin-left: 30%;
+}
+
+#loginSubmit, #registrationSubmit{
+    margin-left: 25%;
+    width: 50%;
+}
+
+/*
+other
+ */
+h1{
+    text-align: center;
+    padding-top: 40px;
+    padding-bottom: 20px;
 }

@@ -1,21 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>ProMan</title>
+{% extends 'layout.html' %}
+{% block header %}
+    <h1>PRO MAN</h1>
+{% endblock %}
 
-        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}">
-        <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
-        <link rel="icon" type="image/png" sizes="96x96" href="{{ url_for('static', filename='favicon/favicon-96x96.png') }}">
-        <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon/favicon-16x16.png') }}">
+{% block content %}
 
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
-        <script type="module" src="{{ url_for('static', filename='js/main.js') }}" defer></script>
-    </head>
-    <body>
-        <h1>ProMan</h1>
-        <div id="boards">Boards are loading...</div>
-    </body>
-</html>
+    {% if user_logged_in %}
+        <div class="group-btn">
+            <a class="btn-primary" href="{{ url_for('logout') }}">Logout</a>
+            <p>Signed as : {{ username }}</p>
+        </div>
+    {% else %}
+    <div class="group-btn">
+        <a class="btn-primary" href="{{ url_for('registration') }}">Registration</a>
+        <a class="btn-primary" href="{{ url_for('login') }}">Login</a>
+    </div>
+    {% endif %}
+
+{% endblock %}

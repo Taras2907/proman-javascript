@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+{% block header %}
+    <h1>Registration form</h1>
+{% endblock %}
+
+{% block content %}
+    <div class="container" id="registrationForm">
+        <form action="{{ url_for('registration') }}" method="post">
+            <div class="form-group">
+                <label for="registerUserName">User Login</label>
+                <input name="user_name" type="text" class="form-control" id="registerUserName"
+                       aria-describedby="loginHelp" placeholder="Enter login" required min="5">
+                <small id="loginHelp" class="form-text text-muted">
+                    Enter your login and password and press submit button to complete registration</small>
+            </div>
+            <div class="form-group">
+                <label for="registerPassword">Password</label>
+                <input name="password" type="password" class="form-control" id="registerPassword"
+                       placeholder="Password" required min="10">
+            </div>
+            <button type="submit" class="btn btn-primary" id="registrationSubmit">Submit</button>
+        </form>
+    </div>
+
+{% endblock %}
