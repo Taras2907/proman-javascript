@@ -66,7 +66,7 @@ def create_new_bord(board_title):
 
 @app.route("/create-new-card//<str:card_title>/<int:board_id>/<str:status_id>")
 @json_response
-def create_new_bord(card_title, board_id, status_id):
+def create_new_card(card_title, board_id, status_id):
     card_position = sql_queries.get_card_order()
     return sql_queries.create_the_new_card(board_id, card_title, status_id, card_position)
 
