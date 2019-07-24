@@ -20,7 +20,7 @@ def index():
 @app.route("/get-boards")
 @json_response
 def get_boards():
-    user_name = session['user_name']
+    user_name = 'taras'
     return sql_queries.get_user_boards('taras')
 
 
@@ -31,7 +31,44 @@ def get_cards_for_board(board_id: int):
     All cards that belongs to a board
     :param board_id: id of the parent board
     """
-    return data_handler.get_cards_for_board()
+    return sql_queries.get_board_cards(board_id)
+
+
+@app.route("/get-board/<int:board_id>'")
+@json_response
+def get_board(board_id):
+    return sql_queries.get_the_board(board_id)
+
+
+@app.route("/get-statuses")
+@json_response
+def get_statuses():
+    return sql_queries.get_the_statuses()
+
+
+@app.route("/get-status<int:id_status>")
+@json_response
+def get_status(id_status):
+    return sql_queries.get_the_status(id_status)
+
+
+@app.route("/get-card<int:id_card>")
+@json_response
+def get_the_card(id_card):
+    return sql_queries.get_the_card(id_card)
+
+
+@app.route("/create-new-board/<str:board_title>")
+@json_response
+def create_new_bord(board_title):
+    return sql_queries.create_the_new_board(board_title)
+
+
+@app.route("/create-new-card//<str:card_title>/<int:board_id>/<str:status_id>")
+@json_response
+def create_new_bord(card_title, board_id, status_id):
+    card_position = sql_queries.get_card_order()
+    return sql_queries.create_the_new_card(board_id, card_title, status_id, card_position)
 
 
 @app.route('/login', methods=['GET', 'POST'])

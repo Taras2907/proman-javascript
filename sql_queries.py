@@ -3,6 +3,14 @@ import database_common
 
 
 @database_common.connection_handler
+def get_card_order(cursor):
+    # generates position for new card
+    cursor.execute('''SELECT id, card_order FROM card ORDER BY card_order DESC LIMIT 1''')
+    card = cursor.fetchall()
+    return card[0]['card_order'] + 1
+
+
+@database_common.connection_handler
 def get_user_id(cursor, user_name):
     cursor.execute('''SELECT id FROM USERS WHERE name = %(user_name)s''',
                          {'user_name': user_name})
@@ -56,7 +64,7 @@ def change_card_title(cursor, new_title, the_id):
 
 
 @database_common.connection_handler
-def create_new_board(cursor, title, private, user_name):
+def create_the_new_board(cursor, title, private, user_name):
     the_id = generate_id('board')
     user_id = get_user_id(user_name)
     cursor.execute('''INSERT INTO board (id, title, private, user_id) 
@@ -65,7 +73,7 @@ def create_new_board(cursor, title, private, user_name):
 
 
 @database_common.connection_handler
-def create_new_card(cursor, board_id, title, status_id, card_order):
+def create_the_new_card(cursor, board_id, title, status_id, card_order):
     the_id = generate_id('card')
     cursor.execute('''INSERT INTO CARD (id, board_id, title, status_id, card_order) VALUES 
                                         (%(the_id)s, %(board_id)s, %(title)s, %(status_id)s, %(card_order)s)''',
@@ -89,4 +97,47 @@ def get_board_cards(cursor, id_board):
     return 'This board doesnt have any cards' if board_cards ==[] else board_cards
 
 
+@database_common.connection_handler
+def get_the_board(cursor, id_board):
+    cursor.execute('''SELECT * FROM board WHERE id = %(id_board)s''',
+                   {'id_board': id_board})
+    the_board = cursor.fetchall()
+    return 'There is no such board' if the_board == [] else the_board
+
+
+@database_common.connection_handler
+def get_the_statuses(cursor):
+    cursor.execute('''SELECT * FROM status''')
+    the_statuses = cursor.fetchall()
+    return 'There is no statuses yet' if the_statuses == [] else the_statuses
+
+
+@database_common.connection_handler
+def get_the_status(cursor, id_status):
+    cursor.execute('''SELECT * FROM status WHERE id = %(id_status)s''',
+                   {'id_status': id_status})
+    the_status = cursor.fetchall()
+    return 'There is no such status' if the_status == [] else the_status
+
+
+@database_common.connection_handler
+def get_the_card(cursor, id_card):
+    cursor.execute('''SELECT * FROM card INNER JOIN status ON card.status_id = status.id WHERE card.id = %(id_card)s''',
+                   {'id_card': id_card})
+    the_card = cursor.fetchall()
+    return 'There is no such status' if the_card == [] else the_card
+
+
+@database_common.connection_handler
+def update_card_status(cursor, id_board, card_id, new_status_id):
+    cursor.execute('''UPDATE card SET status_id = %(new_status_id)s 
+    WHERE board_id = %(id_board)s AND id = %(card_id)s''',
+                   {'new_status_id':new_status_id, 'id_board':id_board, 'card_id':card_id})
+
+
+@database_common.connection_handler
+def update_card_position(cursor, id_board, card_id, new_order):
+    cursor.execute('''UPDATE card SET card_order = %(new_order)s 
+    WHERE board_id = %(id_board)s AND id = %(card_id)s''',
+        {'new_order': new_order, 'id_board': id_board, 'card_id': card_id})
 

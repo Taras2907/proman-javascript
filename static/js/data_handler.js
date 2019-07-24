@@ -42,7 +42,7 @@ export let dataHandler = {
     },
     getBoard: function (boardId, callback) {
         // the board is retrieved and then the callback function is called with the board
-        this._api_get('/get-board', (response) => {
+        this._api_get(`/get-board/${boardId}`, (response) => {
             this._data = response;
             callback(response, boardId);
         })
@@ -56,7 +56,7 @@ export let dataHandler = {
     },
     getStatus: function (statusId, callback) {
         // the status is retrieved and then the callback function is called with the status
-        this._api_get('/get-status', (response)=>{
+        this._api_get(`/get-status/${statusId}`, (response)=>{
             this._data = response;
             callback(response);
         })
@@ -70,14 +70,14 @@ export let dataHandler = {
     },
     getCard: function (cardId, callback) {
         // the card is retrieved and then the callback function is called with the card
-        this._api_get('/get-card', (response)=>{
+        this._api_get(`/get-card/${cardId}`, (response)=>{
             this._data = response;
             callback(response, cardId);
         })
     },
     createNewBoard: function (boardTitle, callback) {
         // creates new board, saves it and calls the callback function with its data
-        this._api_get('/create-new-board', (response)=>{
+        this._api_get(`/create-new-board/${boardTitle}`, (response)=>{
             this._data = response;
             callback(response, boardTitle);
         })
@@ -85,7 +85,7 @@ export let dataHandler = {
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data
-        this._api_get('/create-new-card', (response)=>{
+        this._api_get(`/create-new-card/${cardTitle}/${boardId}/${statusId}`, (response)=>{
             this._data = response;
             callback(response, boardId, statusId);
         })

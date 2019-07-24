@@ -24,6 +24,7 @@ export let dom = {
     loadBoards: function () {
         // retrieves boards and makes showBoards called
         dataHandler.getBoards(function(boards){
+            console.log(boards);
             localStorage.setItem('boards', JSON.stringify(boards));
             dom.loadCards()
             // dom.showBoards(boards);
