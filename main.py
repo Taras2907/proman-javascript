@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for,request, session
 from util import json_response
 from password_hash_verify import *
-from sql_queries import *
+import sql_queries
 
 import data_handler
 
@@ -20,10 +20,8 @@ def index():
 @app.route("/get-boards")
 @json_response
 def get_boards():
-    """
-    All the boards
-    """
-    return data_handler.get_boards()
+    user_name = session['user_name']
+    return sql_queries.get_user_boards(user_name)
 
 
 @app.route("/get-cards/<int:board_id>")
@@ -33,14 +31,14 @@ def get_cards_for_board(board_id: int):
     All cards that belongs to a board
     :param board_id: id of the parent board
     """
-    return data_handler.get_cards_for_board(board_id)
+    return sql_queries.get_board_cards(board_id)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == "POST":
         username = request.form['user_name']
-        user_password = get_users_password(username)
+        user_password = sql_queries.get_users_password(username)
         plain_password = request.form['password']
         if verify_password(plain_password, user_password):
             session['user_name']= username
@@ -64,13 +62,13 @@ def logout():
 def registration():
     if request.method == "POST":
         user_name = request.form['user_name']
-        is_in_database = user_is_in_database(user_name)
+        is_in_database = sql_queries.user_is_in_database(user_name)
         hashed_password = hash_password(request.form['password'])
         if is_in_database:
             user_name_already_exists = 'user_name_exists'
             return render_template('registration.html', user_name_already_exists=user_name_already_exists)
         else:
-            write_user_name_password_to_database(user_name, hashed_password)
+            sql_queries.write_user_name_password_to_database(user_name, hashed_password)
             return render_template('login.html')
     return render_template('registration.html')
 
