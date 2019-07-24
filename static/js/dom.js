@@ -20,10 +20,12 @@ export let dom = {
     init: function () {
         localStorage.clear()
         // This function should run once, when the page is loaded.
+
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
         dataHandler.getBoards(function(boards){
+            console.log(boards);
             localStorage.setItem('boards', JSON.stringify(boards));
             dom.loadCards(function(){
                 dom.showBoards(function(){
@@ -170,5 +172,14 @@ export let dom = {
         }
 
     },
+    theDragula: function () { // listOfDivsWithData as an argument //listOfDivsWithData == [document.getDocumentById(right), .....]
+        dragula([
+            document.getElementById("left"),
+            document.getElementById("right"),
+            document.getElementById("middle")
+        ], {
+            removeOnSpill: true
+        });
+    }
     // here comes more features
 };

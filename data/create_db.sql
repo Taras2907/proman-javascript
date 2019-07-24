@@ -9,7 +9,7 @@ CREATE TABLE card (
     board_id INTEGER,
     title    VARCHAR(200)        NOT NULL,
     status_id INTEGER,
-    card_order varchar(200) NOT NULL
+    card_order INTEGER NOT NULL
 );
 
 

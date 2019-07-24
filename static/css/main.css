@@ -4,12 +4,57 @@ classes
 .container{
     width: 35%;
 }
-
+.btn-primary{
+    padding: 8px;
+}
+.wrapper{
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.jumbotron{
+    position: relative;
+    border-radius: 10px;
+    background-color: #d9d9d9;
+    padding-top: 20px;
+    padding-right: 4px;
+    width:80%;
+}
+.inner {
+    height: auto;
+    width: auto;
+    border-radius: 12px;
+    border-width: 2px;
+    border-style: outset;
+    background-color: white;
+    padding: 0px;
+    margin-left: -5%;
+    color: black;
+    text-align: center;
+}
+.inner:hover{
+    background-color: whitesmoke;
+    cursor: grab;
+}
+.btn-secondary{
+    height: 40px;
+    margin-left: -9.5%;
+    color: gray;
+    border: none;
+    background-color: #d9d9d9;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+.btn-secondary:hover{
+    background-color: #bfbfbf;
+    color: black;
+}
 /*
 id
  */
 #boards {
-    /*background-color: green;*/
+    background-color: green;
 }
 
 #login-form, #registrationForm {
@@ -19,6 +64,9 @@ id
 #loginSubmit, #registrationSubmit{
     margin-left: 25%;
     width: 50%;
+}
+#wrongPasswordOrLogin{
+    color: red;
 }
 
 /*
@@ -163,4 +211,14 @@ section.board{
 
 .card-title{
     padding-right: 16px;
+}
+
+p{
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+}
+h4{
+    text-align: left;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 25px;
 }
