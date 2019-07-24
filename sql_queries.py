@@ -88,5 +88,5 @@ def get_board_cards(cursor, id_board):
     board_cards = cursor.fetchall()
     return 'This board doesnt have any cards' if board_cards ==[] else board_cards
 
-print(get_user_boards('taras'))
+
 
