@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for,request, session
+from flask import Flask, render_template, url_for, request, session
 from util import json_response
 from password_hash_verify import *
 from sql_queries import *
@@ -14,6 +14,7 @@ def index():
     """
     This is a one-pager which shows all the boards and cards
     """
+
     return render_template('index.html')
 
 
