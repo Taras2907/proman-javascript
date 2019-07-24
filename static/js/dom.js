@@ -18,55 +18,54 @@ export let dom = {
         return elementToExtend.lastChild;
     },
     init: function () {
+        localStorage.clear()
         // This function should run once, when the page is loaded.
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
         dataHandler.getBoards(function(boards){
             localStorage.setItem('boards', JSON.stringify(boards));
-            dom.loadCards()
-            // dom.showBoards(boards);
-            // for (let board of boards){
-            //     dom.loadCards(board.id)
-            // }
+            dom.loadCards(function(){
+                dom.showBoards(function(){
+                    dom.showCards()
+                });
+            });
         });
 
     },
-    showBoards: function (boards) {
+    showBoards: function (callback) {
         // shows boards appending them to #boards div
         // it adds necessary event listeners also
+        let boards = JSON.parse(localStorage.getItem('boards'));
 
-        let boardList = '';
-
-        for(let board of boards){
-            boardList += `
+        for (let board of boards) {
+            let newBoard = `
                 <section class="board" id="board-${board.id}">
                     <div class="board-header"><span class="board-title">${board.title}</span>
                         <button class="board-add">Add Card</button>
-                        <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
+                        <button class="board-toggle" 
+                                type="button" 
+                                data-toggle="collapse" 
+                                data-target="#board-${board.id}-columns" 
+                                aria-expanded="false" 
+                                aria-controls="board-${board.id}-columns"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    
+                    <div class="board-columns collapse" id="board-${board.id}-columns">
+                    
                     </div>
                 </section>
-            `;
+                `;
+
+                this._appendToElement(document.querySelector('#board-container'), newBoard)
         }
 
-        const outerHtml = `
-            <ul class="board-container">
-                ${boardList}
-            </ul>
-        `;
-
-        this._appendToElement(document.querySelector('#boards'), outerHtml);
+        callback()
     },
-    loadCards: function () {
+    loadCards: function (callback) {
         // retrieves cards and makes showCards called
 
-        //PYTANIE
-        //dlaczego JSON.stringify zwraca nam pusty slownik jak mamy razem wszystko
-
-
         const boards = JSON.parse(localStorage.getItem('boards'));
-
-        let cards = new Array();
 
         for (let index=0; index<boards.length; index++) {
 
@@ -74,60 +73,102 @@ export let dom = {
                 boards[index].cards = boardCards;
 
                 if (index === boards.length-1) {
-                    localStorage.setItem('boards', JSON.stringify(boards))
+                    localStorage.setItem('boards', JSON.stringify(boards));
+                    callback()
                 }
 
             });
-    //        dlaczego console.log(JSON.stringify(cards)) nie dziala tutaj - zwraca pusty array
+        //        dlaczego console.log(JSON.stringify(cards)) nie dziala tutaj - zwraca pusty array
 
-    }},
-    showCards: function (cards) {
+        }
+    },
+    showCards: function () {
         // shows the cards of a board
         // it adds necessary event listeners also
+        let boards = JSON.parse(localStorage.getItem('boards'));
 
-        let newCards = '';
-        let inProgressCards = '';
-        let testingCards = '';
-        let doneCards = '';
 
-        for (let card of cards) {
-            if (card.status_id === 0) {
-                newCards += `
-                    <div class="card">
-                        <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                        <div class="card-title">${card.title}</div>
-                    </div>
-                `;
+
+        for (let board of boards) {
+
+            let newCardList = '';
+            let inProgressCardList = '';
+            let testingCardList = '';
+            let doneCardList = '';
+
+            for(let card of board.cards) {
+                if (card.status_id === 'new') {
+                    newCardList += `
+                        <div class="card">
+                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+                            <div class="card-title">${card.title}</div>
+                        </div>
+                        `
+                } else if (card.status_id === 'in progress') {
+                    inProgressCardList += `
+                        <div class="card">
+                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+                            <div class="card-title">${card.title}</div>
+                        </div>
+                        `
+                } else if (card.status_id === 'testing') {
+                    testingCardList += `
+                        <div class="card">
+                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+                            <div class="card-title">${card.title}</div>
+                        </div>
+                        `
+                }   else if (card.status_id === 'done') {
+                    doneCardList += `
+                        <div class="card">
+                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+                            <div class="card-title">${card.title}</div>
+                        </div>
+                        `
+                }
             }
-        }
 
-        const outerHtml = `
-            <div class="board-columns">
+
+            let newCardColumn = `
                 <div class="board-column">
                     <div class="board-column-title">New</div>
                     <div class="board-column-content">
-                        ${newCards}
+                        ${newCardList}
                     </div>
-                </div>    
-            </div>    
-        `;
+                </div>
+            `;
 
-        return outerHtml
-        // let newCardsColumn = `
-        //     <div class="board-column">
-        //         <div class="board-column-title">New</div>
-        //         <div class="board-column-content">
-        //             ${newCards}
-        //         </div>
-        //     </div>
-        // `;
+            let inProgressCardColumn = `
+                <div class="board-column">
+                    <div class="board-column-title">In progress</div>
+                    <div class="board-column-content">
+                        ${inProgressCardList}
+                    </div>
+                </div>
+            `;
 
-        // const boardColumns = `
-        //     <div class="board-columns">
-        //         ${newCardsColumn}
-        //     </div>
-        // `;
-        //
+            let testingCardColumn = `
+                <div class="board-column">
+                    <div class="board-column-title">Testing</div>
+                    <div class="board-column-content">
+                        ${testingCardList}
+                    </div>
+                </div>
+            `;
+
+            let doneCardColumn = `
+                <div class="board-column">
+                    <div class="board-column-title">Done</div>
+                    <div class="board-column-content">
+                        ${doneCardList}
+                    </div>
+                </div>
+            `;
+            let columns = newCardColumn + inProgressCardColumn + testingCardColumn + doneCardColumn;
+
+            this._appendToElement(document.querySelector(`#board-${board.id} > .board-columns`), columns)
+        }
+
     },
     // here comes more features
 };
