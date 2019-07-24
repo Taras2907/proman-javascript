@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for,request, session
+from flask import Flask, render_template, url_for,request, session, redirect
 from util import json_response
 from password_hash_verify import *
 import sql_queries
@@ -21,7 +21,7 @@ def index():
 @json_response
 def get_boards():
     user_name = session['user_name']
-    return sql_queries.get_user_boards(user_name)
+    return sql_queries.get_user_boards('taras')
 
 
 @app.route("/get-cards/<int:board_id>")
@@ -31,7 +31,7 @@ def get_cards_for_board(board_id: int):
     All cards that belongs to a board
     :param board_id: id of the parent board
     """
-    return sql_queries.get_board_cards(board_id)
+    return data_handler.get_cards_for_board()
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -55,7 +55,7 @@ def login():
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
     session.clear()
-    return render_template('index.html')
+    return redirect(url_for('index'))
 
 
 @app.route('/registration', methods=['GET', 'POST'])

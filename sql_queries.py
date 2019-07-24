@@ -78,7 +78,7 @@ def get_user_boards(cursor, user_name):
     cursor.execute('''SELECT * FROM board WHERE user_id = %(id_user)s''',
                    {'id_user': id_user})
     user_boards = cursor.fetchall()
-    return 'You dont have any boards' if user_boards ==[] else user_boards[0]
+    return 'You dont have any boards' if user_boards ==[] else user_boards
 
 
 @database_common.connection_handler
@@ -86,7 +86,7 @@ def get_board_cards(cursor, id_board):
     cursor.execute('''SELECT * FROM card WHERE board_id = %(id_board)s''',
                    {'id_board': id_board})
     board_cards = cursor.fetchall()
-    return 'This board doesnt have any cards' if board_cards ==[] else board_cards[0]
+    return 'This board doesnt have any cards' if board_cards ==[] else board_cards
 
-
+print(get_user_boards('taras'))
 
