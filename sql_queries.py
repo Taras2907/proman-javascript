@@ -90,8 +90,17 @@ def get_user_boards(cursor, user_name):
 
 
 @database_common.connection_handler
+def get_boards(cursor):
+    cursor.execute('''SELECT * FROM board WHERE private = False''')
+    boards = cursor.fetchall()
+    return 'You dont have any boards' if boards ==[] else boards
+
+
+@database_common.connection_handler
 def get_board_cards(cursor, id_board):
-    cursor.execute('''SELECT * FROM card WHERE board_id = %(id_board)s''',
+    cursor.execute('''SELECT c.id, board_id, c.title, card_order, s.title as status_id FROM card AS c
+    JOIN status AS s ON status_id = s.id
+    WHERE board_id = %(id_board)s''',
                    {'id_board': id_board})
     board_cards = cursor.fetchall()
     return 'This board doesnt have any cards' if board_cards ==[] else board_cards
