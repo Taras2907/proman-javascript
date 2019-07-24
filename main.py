@@ -71,6 +71,12 @@ def create_new_card(card_title, board_id, status_id):
     return sql_queries.create_the_new_card(board_id, card_title, status_id, card_position)
 
 
+@app.route("/change-status-title/<status_id>/<new_title>")
+@json_response
+def change_status_title(status_id, new_title):
+    return sql_queries.change_the_title_of_status(status_id, new_title)
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == "POST":

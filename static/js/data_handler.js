@@ -96,6 +96,12 @@ export let dataHandler = {
             callback(response, boardId, statusId, cardId)
         })
     },
+    changeStatusTitle: function (statusId, newTitle, callback) {
+        this._api_get(`/change-status-title/${statusId}/${newTitle}`, (response)=>{
+            this._data = response;
+            callback(response)
+        })
+    }
 /*    changeCardPosition:function (boardId, statusId, cardId, callback) {
         this._api_post(`/update-card-position/${boardId}/${statusId}/${cardId}`), (response)=>
 

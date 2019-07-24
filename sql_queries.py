@@ -141,3 +141,8 @@ def update_card_position(cursor, id_board, card_id, new_order):
     WHERE board_id = %(id_board)s AND id = %(card_id)s''',
         {'new_order': new_order, 'id_board': id_board, 'card_id': card_id})
 
+
+@database_common.connection_handler
+def change_the_title_of_status(cursor, status_id, new_title):
+    cursor.execute('''UPDATE status SET title = %(new_title)s WHERE id = %(status_id)s''',
+                   {'new_title':new_title, 'status_id':status_id})

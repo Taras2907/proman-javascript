@@ -139,6 +139,16 @@ export let dom = {
         ], {
             removeOnSpill: true
         });
+    },
+    editStatus: function () {
+        let allStatusHeaders = document.getElementsByClassName('mod-list-name');
+        allStatusHeaders.forEach(function (statusHeader) {
+            statusHeader.addEventListener('focusout', function () {
+            let newTitle = statusHeader.value;
+            let statusId = statusHeader.dataset['statusId'];
+            dataHandler.changeCardStatus(statusId, newTitle)
+        })
+        })
     }
     // here comes more features
 };

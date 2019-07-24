@@ -50,6 +50,37 @@ classes
     background-color: #bfbfbf;
     color: black;
 }
+
+textarea.mod-list-name {
+
+    width:70%;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 25px;
+    position: relative;
+    border: none;
+    background: transparent;
+    border-radius: 3px;
+    box-shadow: none;
+    font-weight: 600;
+    margin: -4px 0;
+    height: 30px;
+    min-height: 20px;
+    padding: 4px 8px;
+    resize: none;
+    max-height: 256px;
+    overflow: hidden;
+    overflow-wrap: break-word;
+
+}
+textarea.mod-list-name:hover{
+    cursor: pointer;
+}
+
+textarea.mod-list-name:focus{
+    background-color: white;
+    border: none;
+    box-shadow: inset 0 0 0 2px #0079bf;
+}
 /*
 id
  */
@@ -94,7 +125,7 @@ From template
 body{
     min-width: 620px;
     background: #ddd url(http://cdn.backgroundhost.com/backgrounds/subtlepatterns/diagonal-noise.png);
-    font-family: sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 
 h1, .board-title, .board-column-title{
@@ -221,4 +252,31 @@ h4{
     text-align: left;
     font-family: 'Open Sans', sans-serif;
     font-size: 25px;
+}
+
+textarea {
+    -webkit-appearance: textarea;
+    background-color: white;
+    -webkit-rtl-ordering: logical;
+    flex-direction: column;
+    resize: none;
+    cursor: text;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    border-width: 1px;
+    border-style: solid;
+    border-color: initial;
+    border-image: initial;
+    padding: 2px;
+    text-rendering: auto;
+    color: initial;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0;
+    text-shadow: none;
+    display: inline-block;
+    text-align: start;
+    margin: 0;
+    font: 400 13.3333px Arial;
 }
