@@ -35,6 +35,11 @@ CREATE TABLE users (
     password VARCHAR(200) NOT NULL
 );
 
+CREATE TABLE board_status (
+    board_id INTEGER NOT NULL,
+    status_id INTEGER NOT NULL
+);
+
 
 ALTER TABLE ONLY board
     ADD CONSTRAINT fk_board_user_id FOREIGN KEY (user_id) REFERENCES users(id);

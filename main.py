@@ -20,8 +20,7 @@ def index():
 @app.route("/get-boards")
 @json_response
 def get_boards():
-    user_name = 'taras'
-    return sql_queries.get_user_boards('taras')
+    return sql_queries.get_boards()
 
 
 @app.route("/get-cards/<int:board_id>")
