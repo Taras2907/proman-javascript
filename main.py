@@ -58,13 +58,13 @@ def get_the_card(id_card):
     return sql_queries.get_the_card(id_card)
 
 
-@app.route("/create-new-board/<str:board_title>")
+@app.route("/create-new-board/<board_title>")
 @json_response
 def create_new_bord(board_title):
     return sql_queries.create_the_new_board(board_title)
 
 
-@app.route("/create-new-card//<str:card_title>/<int:board_id>/<str:status_id>")
+@app.route("/create-new-card/<card_title>/<board_id>/<status_id>")
 @json_response
 def create_new_card(card_title, board_id, status_id):
     card_position = sql_queries.get_card_order()

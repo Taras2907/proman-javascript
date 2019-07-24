@@ -89,6 +89,16 @@ export let dataHandler = {
             this._data = response;
             callback(response, boardId, statusId);
         })
-    }
+    },
+    changeCardStatus:function (boardId, statusId, cardId, callback) {
+        this._api_post(`/update-card-status/${boardId}/${statusId}/${cardId}`, (response)=>{
+            this._data = response;
+            callback(response, boardId, statusId, cardId)
+        })
+    },
+/*    changeCardPosition:function (boardId, statusId, cardId, callback) {
+        this._api_post(`/update-card-position/${boardId}/${statusId}/${cardId}`), (response)=>
+
+    }*/
     // here comes more features
 };
