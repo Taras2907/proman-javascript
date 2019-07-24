@@ -8,21 +8,23 @@ classes
     padding: 8px;
 }
 .wrapper{
-    padding: 30px;
+    padding: 10px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
 }
 .jumbotron{
+    position: relative;
     border-radius: 10px;
     background-color: #d9d9d9;
     padding-top: 20px;
-    padding-right: 10px;
+    padding-right: 4px;
     width:80%;
 }
 .inner {
-    height: 90px;
+    height: auto;
     width: 390px;
     border-radius: 12px;
+    border-width: 1.5px;
     border-style: outset;
     background-color: white;
     padding: 0px;
@@ -33,6 +35,20 @@ classes
 .inner:hover{
     background-color: whitesmoke;
     cursor: grab;
+}
+.btn-secondary{
+    height: 40px;
+    margin-left: -7.5%;
+    color: gray;
+    border: none;
+    background-color: #d9d9d9;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+.btn-secondary:hover{
+    background-color: #bfbfbf;
+    color: black;
 }
 /*
 id
@@ -57,15 +73,16 @@ id
 other
  */
 h1{
-    text-align: center;
+    text-align: left;
     padding-top: 40px;
     padding-bottom: 20px;
 }
 p{
     font-family: 'Open Sans', sans-serif;
-    font-size: 22px;
-    padding: 2%;
+    font-size: 15px;
 }
 h4{
-    text-align: center;
+    text-align: left;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 25px;
 }

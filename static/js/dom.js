@@ -55,7 +55,13 @@ export let dom = {
         // it adds necessary event listeners also
     },
     theDragula: function () { // listOfDivsWithData as an argument //listOfDivsWithData == [document.getDocumentById(right), .....]
-        dragula([document.getElementById("left"), document.getElementById("right"),document.getElementById("middle")]);
+        dragula([
+            document.getElementById("left"),
+            document.getElementById("right"),
+            document.getElementById("middle")
+        ], {
+            removeOnSpill: true
+        });
     }
     // here comes more features
 };
