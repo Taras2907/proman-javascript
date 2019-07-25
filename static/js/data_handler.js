@@ -47,9 +47,9 @@ export let dataHandler = {
             callback(response, boardId);
         })
     },
-    getStatuses: function (callback) {
+    getBoardStatuses: function (boardId, listOfGroupedCards, callback) {
         // the statuses are retrieved and then the callback function is called with the statuses
-        this._api_get('/get-statuses', (response)=>{
+        this._api_get(`/get-board-statuses/${boardId}`, (response)=>{
             this._data = response;
             callback(response);
         })
@@ -100,6 +100,12 @@ export let dataHandler = {
         this._api_get(`/change-status-title/${statusId}/${newTitle}`, (response)=>{
             this._data = response;
             callback(response)
+        })
+    },
+    changeBoardTitle: function (boardId, newTitle) {
+        this._api_get(`/change-board-title/${boardId}/${newTitle}`, (response)=>{
+            this._data = response;
+            
         })
     }
 /*    changeCardPosition:function (boardId, statusId, cardId, callback) {

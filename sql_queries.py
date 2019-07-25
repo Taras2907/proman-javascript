@@ -122,6 +122,13 @@ def get_the_statuses(cursor):
 
 
 @database_common.connection_handler
+def get_the_board_statuses(cursor, board_id):
+    cursor.execute('''SELECT * FROM status ''')
+    the_statuses = cursor.fetchall()
+    return 'There is no statuses yet' if the_statuses == [] else the_statuses
+
+
+@database_common.connection_handler
 def get_the_status(cursor, id_status):
     cursor.execute('''SELECT * FROM status WHERE id = %(id_status)s''',
                    {'id_status': id_status})
@@ -155,3 +162,10 @@ def update_card_position(cursor, id_board, card_id, new_order):
 def change_the_title_of_status(cursor, status_id, new_title):
     cursor.execute('''UPDATE status SET title = %(new_title)s WHERE id = %(status_id)s''',
                    {'new_title':new_title, 'status_id':status_id})
+
+
+@database_common.connection_handler
+def change_the_title_of_board(cursor, board_id, new_title):
+    cursor.execute('''UPDATE board SET title = %(new_title)s WHERE id = %(board_id)s''',
+                   {'new_title':new_title, 'board_id':board_id})
+
