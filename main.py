@@ -83,6 +83,14 @@ def change_board_title(board_id, new_title):
     return None
 
 
+@app.route("/change-status-title/<status_id>/<new_title>")
+@json_response
+def change_status_title(status_id, new_title):
+    print(status_id)
+    sql_queries.change_the_title_of_status(status_id, new_title)
+    return None
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == "POST":

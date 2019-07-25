@@ -96,10 +96,9 @@ export let dataHandler = {
             callback(response, boardId, statusId, cardId)
         })
     },
-    changeStatusTitle: function (statusId, newTitle, callback) {
+    changeStatusTitle: function (statusId, newTitle) {
         this._api_get(`/change-status-title/${statusId}/${newTitle}`, (response)=>{
             this._data = response;
-            callback(response)
         })
     },
     changeBoardTitle: function (boardId, newTitle) {
@@ -107,7 +106,7 @@ export let dataHandler = {
             this._data = response;
             
         })
-    }
+    },
 /*    changeCardPosition:function (boardId, statusId, cardId, callback) {
         this._api_post(`/update-card-position/${boardId}/${statusId}/${cardId}`), (response)=>
 

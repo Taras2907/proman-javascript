@@ -92,39 +92,38 @@ export let dom = {
         let boards = JSON.parse(localStorage.getItem('boards'));
 
 
-        dom.addEditListenersToHeaders();
+        dom.addEditListenersToBoardHeaders();
         for (let board of boards) {
 
             let newCardList = '';
             let inProgressCardList = '';
             let testingCardList = '';
             let doneCardList = '';
-
             for(let card of board.cards) {
                 if (card.status_id === 'new') {
                     newCardList += `
-                        <div class="card">
+                        <div class="card" id="${card.id}">
                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                             <div class="card-title">${card.title}</div>
                         </div>
                         `
                 } else if (card.status_id === 'in progress') {
                     inProgressCardList += `
-                        <div class="card">
+                        <div class="card" id="${card.id}">
                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                             <div class="card-title">${card.title}</div>
                         </div>
                         `
                 } else if (card.status_id === 'testing') {
                     testingCardList += `
-                        <div class="card">
+                        <div class="card" id="${card.id}">
                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                             <div class="card-title">${card.title}</div>
                         </div>
                         `
                 }   else if (card.status_id === 'done') {
                     doneCardList += `
-                        <div class="card">
+                        <div class="card" id="${card.id}">
                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                             <div class="card-title">${card.title}</div>
                         </div>
@@ -147,6 +146,7 @@ export let dom = {
 
                 let boardElement = document.querySelector(`[data-boardsid='${board.id}']`);
                 boardElement.insertAdjacentHTML('beforeend',columns);
+                //dom.addEditListenersToStatusHeaders();
             }); // call adn apply
 
 
@@ -155,21 +155,32 @@ export let dom = {
     },
     theDragula: function () { // listOfDivsWithData as an argument //listOfDivsWithData == [document.getDocumentById(right), .....]
         dragula([
-            document.getElementById("left"),
-            document.getElementById("right"),
-            document.getElementById("middle")
+            document.getElementById("1"),
+            document.getElementById("3"),
+            document.getElementById("4")
         ], {
             removeOnSpill: true
         });
     },
-    addEditListenersToHeaders: function () {
-        let allBoardHeaders = document.querySelectorAll("[data-boardId]");
+    addEditListenersToBoardHeaders: function () {
+        let allBoardHeaders = document.querySelectorAll("[data-boardid]");
         allBoardHeaders.forEach(function (boardHeader) {
             boardHeader.addEventListener('focusout', function () {
             let newTitle = boardHeader.value;
             let boardId = boardHeader.dataset['boardid'];
             dataHandler.changeBoardTitle(boardId, newTitle)
-        })
+            })
+            })
+    },
+    addEditListenersToStatusHeaders: function () {
+        let allStatusHeaders = document.querySelectorAll("[data-statusid]");
+        allStatusHeaders.forEach(function (statusHeader) {
+            statusHeader.addEventListener('focusout', function () {
+                let newTitle = statusHeader.value;
+                console.log(statusHeader.dataset['statusid']);
+                let statusId = statusHeader.dataset['statusid'];
+                dataHandler.changeStatusTitle(statusId, newTitle)
+            })
         })
     }
     // here comes more features
