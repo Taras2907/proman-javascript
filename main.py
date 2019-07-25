@@ -45,6 +45,12 @@ def get_statuses():
     return sql_queries.get_the_statuses()
 
 
+@app.route("/get-board-statuses/<board_id>")
+@json_response
+def get_board_statuses(board_id):
+    return sql_queries.get_the_board_statuses(board_id)
+
+
 @app.route("/get-status<int:id_status>")
 @json_response
 def get_status(id_status):
@@ -68,6 +74,13 @@ def create_new_bord(board_title):
 def create_new_card(card_title, board_id, status_id):
     card_position = sql_queries.get_card_order()
     return sql_queries.create_the_new_card(board_id, card_title, status_id, card_position)
+
+
+@app.route("/change-board-title/<board_id>/<new_title>")
+@json_response
+def change_board_title(board_id, new_title):
+    sql_queries.change_the_title_of_board(board_id, new_title)
+    return None
 
 
 @app.route('/login', methods=['GET', 'POST'])
