@@ -19,6 +19,7 @@ export let dom = {
     },
     init: function () {
         localStorage.clear()
+		dom.addBoardEventListener()
         // This function should run once, when the page is loaded.
 
     },
@@ -42,28 +43,7 @@ export let dom = {
         let boards = JSON.parse(localStorage.getItem('boards'));
 
         for (let board of boards) {
-            let newBoard = `
-                <section class="board" id="board-${board.id}">
-                    <div class="board-header">
-                    <span class="board-title">
-                    <textarea class="mod-list-name" data-boardId="${board.id}">${board.title}</textarea>
-                    </span>
-                        <button class="board-add">Add Card</button>
-                        <button class="board-toggle" 
-                                type="button" 
-                                data-toggle="collapse" 
-                                data-target="#board-${board.id}-columns" 
-                                aria-expanded="false" 
-                                aria-controls="board-${board.id}-columns"><i class="fas fa-chevron-down"></i></button>
-                    </div>
-                    
-                    <div class="board-columns collapse" id="board-${board.id}-columns" data-boardsId ="${board.id}">
-                    
-                    </div>
-                </section>
-                `;
-
-                this._appendToElement(document.querySelector('#board-container'), newBoard)
+            dom.showNewBoard(board)
         }
 
         callback()
@@ -173,6 +153,50 @@ export let dom = {
             dataHandler.changeBoardTitle(boardId, newTitle)
         })
         })
-    }
+    },
+
+    addBoard: function() {
+    	let board = {
+    		boardId: 5,
+    		title: 'New board',
+			loggedUser: 'kornel',
+			isPrivate: false,
+		};
+
+    	dataHandler.createNewBoard(board);
+
+    	dom.showNewBoard(board)
+
+	},
+
+	addBoardEventListener: function() {
+		document.getElementById('add-board-btn').addEventListener('click', dom.addBoard)
+	},
+
+	showNewBoard: function(board) {
+    	let newBoard = `
+			<section class="board" id="board-${board.id}">
+				<div class="board-header">
+				<span class="board-title">
+				<textarea class="mod-list-name" data-boardId="${board.id}">${board.title}</textarea>
+				</span>
+					<button class="board-add">Add Card</button>
+					<button class="board-toggle" 
+							type="button" 
+							data-toggle="collapse" 
+							data-target="#board-${board.id}-columns" 
+							aria-expanded="false" 
+							aria-controls="board-${board.id}-columns"><i class="fas fa-chevron-down"></i></button>
+				</div>
+				
+				<div class="board-columns collapse" id="board-${board.id}-columns" data-boardsId ="${board.id}">
+				
+				</div>
+			</section>
+			`;
+
+		this._appendToElement(document.querySelector('#board-container'), newBoard)
+	},
+
     // here comes more features
 };

@@ -1,4 +1,5 @@
 from flask import Flask, render_template, url_for,request, session, redirect
+import json
 from util import json_response
 from password_hash_verify import *
 import sql_queries
@@ -63,10 +64,12 @@ def get_the_card(id_card):
     return sql_queries.get_the_card(id_card)
 
 
-@app.route("/create-new-board/<board_title>")
+@app.route("/create-new-board", methods=["Post"])
 @json_response
-def create_new_bord(board_title):
-    return sql_queries.create_the_new_board(board_title)
+def create_new_bord():
+    board = json.loads(request.data)
+
+    return sql_queries.create_the_new_board(board)
 
 
 @app.route("/create-new-card/<card_title>/<board_id>/<status_id>")
@@ -90,7 +93,7 @@ def login():
         user_password = sql_queries.get_users_password(username)
         plain_password = request.form['password']
         if verify_password(plain_password, user_password):
-            session['user_name']= username
+            session['user_name'] = username
             session['password'] = hash_password(request.form['password'])
             session['logged_in'] = True
             user_logged_in = True
