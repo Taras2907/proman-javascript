@@ -55,11 +55,11 @@ export let dom = {
 
 		const boards = JSON.parse(localStorage.getItem('boards'));
 
-		for (let index = 0; index < boards.length; index++) {
+		for (let board of boards) {
 
-			dataHandler.getCardsByBoardId(parseInt(boards[index].id), function (boardCards) {
+			dataHandler.getCardsByBoardId(parseInt(board.id), function (boardCards) {
 
-				boards[index].cards = boardCards;
+				board.cards = boardCards;
 
 				if (JSON.parse(JSON.stringify(boards)).every(dom.haveCards)) {
 					localStorage.setItem('boards', JSON.stringify(boards));
