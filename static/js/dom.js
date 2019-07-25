@@ -24,6 +24,7 @@ export let dom = {
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
+
         dataHandler.getBoards(function(boards){
             localStorage.setItem('boards', JSON.stringify(boards));
             dom.loadCards(function(){
@@ -75,6 +76,7 @@ export let dom = {
 
                 if (index === boards.length-1) {
                     localStorage.setItem('boards', JSON.stringify(boards));
+                    console.log(JSON.parse(localStorage.getItem('boards')));
                     callback()
                 }
 
