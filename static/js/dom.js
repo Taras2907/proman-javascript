@@ -25,7 +25,6 @@ export let dom = {
     loadBoards: function () {
         // retrieves boards and makes showBoards called
         dataHandler.getBoards(function(boards){
-            console.log(boards);
             localStorage.setItem('boards', JSON.stringify(boards));
             dom.loadCards(function(){
                 dom.showBoards(function(){
@@ -43,7 +42,10 @@ export let dom = {
         for (let board of boards) {
             let newBoard = `
                 <section class="board" id="board-${board.id}">
-                    <div class="board-header"><span class="board-title">${board.title}</span>
+                    <div class="board-header">
+                    <span class="board-title">
+                    <textarea class="mod-list-name" data-boardId="${board.id}">${board.title}</textarea>
+                    </span>
                         <button class="board-add">Add Card</button>
                         <button class="board-toggle" 
                                 type="button" 
@@ -53,7 +55,7 @@ export let dom = {
                                 aria-controls="board-${board.id}-columns"><i class="fas fa-chevron-down"></i></button>
                     </div>
                     
-                    <div class="board-columns collapse" id="board-${board.id}-columns">
+                    <div class="board-columns collapse" id="board-${board.id}-columns" data-boardsId ="${board.id}">
                     
                     </div>
                 </section>
@@ -90,7 +92,7 @@ export let dom = {
         let boards = JSON.parse(localStorage.getItem('boards'));
 
 
-
+        dom.addEditListenersToHeaders();
         for (let board of boards) {
 
             let newCardList = '';
@@ -128,47 +130,26 @@ export let dom = {
                         </div>
                         `
                 }
-            }
-
-
-            let newCardColumn = `
+            }   let columns = '';
+                let listOfGroupedCards = [newCardList,inProgressCardList, testingCardList, testingCardList];
+                dataHandler.getBoardStatuses(board.id, listOfGroupedCards, function (statuses ) {
+                for (let status =0; status<statuses.length; status++){
+                    let newCardColumn = `
                 <div class="board-column">
-                    <div class="board-column-title">New</div>
+                    <div class="board-column-title">
+                    <textarea class="mod-list-header" data-statusId="${statuses[status].id}">${statuses[status].title}</textarea></div>
                     <div class="board-column-content">
-                        ${newCardList}
+                        ${listOfGroupedCards[status]}
                     </div>
                 </div>
-            `;
+            `;      columns += newCardColumn;
+                }
 
-            let inProgressCardColumn = `
-                <div class="board-column">
-                    <div class="board-column-title">In progress</div>
-                    <div class="board-column-content">
-                        ${inProgressCardList}
-                    </div>
-                </div>
-            `;
+                let boardElement = document.querySelector(`[data-boardsid='${board.id}']`);
+                boardElement.insertAdjacentHTML('beforeend',columns);
+            }); // call adn apply
 
-            let testingCardColumn = `
-                <div class="board-column">
-                    <div class="board-column-title">Testing</div>
-                    <div class="board-column-content">
-                        ${testingCardList}
-                    </div>
-                </div>
-            `;
 
-            let doneCardColumn = `
-                <div class="board-column">
-                    <div class="board-column-title">Done</div>
-                    <div class="board-column-content">
-                        ${doneCardList}
-                    </div>
-                </div>
-            `;
-            let columns = newCardColumn + inProgressCardColumn + testingCardColumn + doneCardColumn;
-
-            this._appendToElement(document.querySelector(`#board-${board.id} > .board-columns`), columns)
         }
 
     },
@@ -181,13 +162,13 @@ export let dom = {
             removeOnSpill: true
         });
     },
-    editStatus: function () {
-        let allStatusHeaders = document.getElementsByClassName('mod-list-name');
-        allStatusHeaders.forEach(function (statusHeader) {
-            statusHeader.addEventListener('focusout', function () {
-            let newTitle = statusHeader.value;
-            let statusId = statusHeader.dataset['statusId'];
-            dataHandler.changeCardStatus(statusId, newTitle)
+    addEditListenersToHeaders: function () {
+        let allBoardHeaders = document.querySelectorAll("[data-boardId]");
+        allBoardHeaders.forEach(function (boardHeader) {
+            boardHeader.addEventListener('focusout', function () {
+            let newTitle = boardHeader.value;
+            let boardId = boardHeader.dataset['boardid'];
+            dataHandler.changeBoardTitle(boardId, newTitle)
         })
         })
     }
