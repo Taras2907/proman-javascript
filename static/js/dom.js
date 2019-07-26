@@ -204,7 +204,6 @@ export let dom = {
             cardHeader.addEventListener('focusout', function () {
                 let newTitle = cardHeader.value;
                 let cardId = cardHeader.dataset['cardid'];
-                console.log(newTitle, cardId);
                 dataHandler.changeCardTitle(newTitle, cardId)
             })
         })
@@ -216,7 +215,7 @@ export let dom = {
         allButtons.forEach(function (button) {
             button.addEventListener("click",function(){
                 let boardId = button.dataset['addcard'];
-                console.log(cardTitle, boardId, statusId);
+                console.log(boardId);
                 dataHandler.createNewCard(cardTitle, boardId, statusId);
                 dom.addCard(boardId);
             })
@@ -257,7 +256,7 @@ export let dom = {
 				<span class="board-title">
 				<textarea class="mod-list-name" data-boardId="${board.id}">${board.title}</textarea>
 				</span>
-					<button class="board-add">Add Card</button>
+					<button class="board-add" data-addcard="${board.id}">Add Card</button>
 					<button class="board-toggle" 
 							type="button" 
 							data-toggle="collapse" 
