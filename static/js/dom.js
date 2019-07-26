@@ -46,7 +46,7 @@ export let dom = {
 		for (let board of boards) {
 			dom.showNewBoard(board)
 		}
-
+		dom.addEventListenersToAddCardButton();
 		callback()
 	},
 
@@ -86,100 +86,152 @@ export let dom = {
 		dom.addEditListenersToBoardHeaders();
 		for (let board of boards) {
 
-			let newCardList = '';
-			let inProgressCardList = '';
-			let testingCardList = '';
-			let doneCardList = '';
-			for (let card of board.cards) {
-
-				if (card.status_id === 'new') {
-					newCardList += `
+            let newCardList = '';
+            let inProgressCardList = '';
+            let testingCardList = '';
+            let doneCardList = '';
+            for(let card of board.cards) {
+                if (card.status_id === 'new') {
+                    newCardList += `
                         <div class="card" id="${card.id}">
                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">${card.title}</div>
+                            <div class="card-title"><textarea 
+                            class="mod-list-card"
+                            spellcheck="false"
+                            data-cardId="${card.id}">${card.title}
+                            </textarea></div>
                         </div>
                         `
-				} else if (card.status_id === 'in progress') {
-					inProgressCardList += `
+                } else if (card.status_id === 'in progress') {
+                    inProgressCardList += `
                         <div class="card" id="${card.id}">
                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">${card.title}</div>
+                            <div class="card-title"><textarea 
+                            class="mod-list-card"
+                            spellcheck="false"
+                            data-cardId="${card.id}">${card.title}
+                            </textarea></div>
                         </div>
                         `
-				} else if (card.status_id === 'testing') {
-					testingCardList += `
-                        <div class="card" id="${card.id}">
+                } else if (card.status_id === 'testing') {
+                    testingCardList += `
+                        <div class="card">
                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">${card.title}</div>
+                            <div class="card-title"><textarea 
+                            class="mod-list-card"
+                            spellcheck="false"
+                            data-cardId="${card.id}">${card.title}
+                            </textarea></div>
                         </div>
                         `
-				} else if (card.status_id === 'done') {
-					doneCardList += `
-                        <div class="card" id="${card.id}">
+                }   else if (card.status_id === 'done') {
+                    doneCardList += `
+                        <div class="card">
                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">${card.title}</div>
+                            <div class="card-title">
+                            <textarea 
+                            class="mod-list-card"
+                            spellcheck="false"
+                            data-cardId="${card.id}">${card.title}
+                            </textarea>
+                            </div>
                         </div>
                         `
-				}
-			}
-			let columns = '';
-			let listOfGroupedCards = [newCardList, inProgressCardList, testingCardList, testingCardList];
-			dataHandler.getBoardStatuses(board.id, listOfGroupedCards, function (statuses) {
-				for (let status = 0; status < statuses.length; status++) {
-					let newCardColumn = `
+                }
+            }   let columns = '';
+                let listOfGroupedCards = [newCardList,inProgressCardList, testingCardList, testingCardList];
+                dataHandler.getBoardStatuses(board.id, listOfGroupedCards, function (statuses ) {
+                for (let status =0; status<statuses.length; status++){
+                    let newCardColumn = `
                 <div class="board-column">
                     <div class="board-column-title">
-                    <textarea class="mod-list-header" data-statusId="${statuses[status].id}">${statuses[status].title}</textarea></div>
-                    <div class="board-column-content">
+                    <textarea 
+                    class="mod-list-header"
+                    spellcheck="false"
+                    data-statusId="${statuses[status].id}">${statuses[status].title}
+                    </textarea></div>
+                    <div class="board-column-content" id="board${board.id}${statuses[status].id}" data-columnboardid='${board.id}'>
                         ${listOfGroupedCards[status]}
                     </div>
                 </div>
-            `;
-					columns += newCardColumn;
-				}
+            `;      columns += newCardColumn;
+                }
 
-				let boardElement = document.querySelector(`[data-boardsid='${board.id}']`);
-				boardElement.insertAdjacentHTML('beforeend', columns);
-				//dom.addEditListenersToStatusHeaders();
-			}); // call adn apply
+                let boardElement = document.querySelector(`[data-boardsid='${board.id}']`);
+                boardElement.insertAdjacentHTML('beforeend',columns);
+                dom.addEditListenersToCardHeaders();
+            }); // call adn apply
+        }
+    },
+    theDragula: function () {
+        dragula([document.getElementById('board30'),
+                document.getElementById('board31'),
+                document.getElementById('board32'),
+                document.getElementById('board33')],{
+            removeOnSpill:true
+        });
+        dragula([document.getElementById('board10'),
+                document.getElementById('board11'),
+                document.getElementById('board12'),
+                document.getElementById('board13')],
+            {
+            removeOnSpill:true
+        });
+    },
+    addEditListenersToBoardHeaders: function () {
+        let allBoardHeaders = document.querySelectorAll("[data-boardid]");
+        allBoardHeaders.forEach(function (boardHeader) {
+            boardHeader.addEventListener('focusout', function () {
+            let newTitle = boardHeader.value;
+            let boardId = boardHeader.dataset['boardid'];
+            dataHandler.changeBoardTitle(boardId, newTitle)
+            })
+            })
+    },
+    addEditListenersToStatusHeaders: function () {
+        let allStatusHeaders = document.querySelectorAll("[data-statusid]");
+        allStatusHeaders.forEach(function (statusHeader) {
+            statusHeader.addEventListener('focusout', function () {
+                let newTitle = statusHeader.value;
+                let statusId = statusHeader.dataset['statusid'];
+                dataHandler.changeStatusTitle(statusId, newTitle)
+            })
+        })
+    },
+    addEditListenersToCardHeaders: function () {
+        let allCardHeaders = document.querySelectorAll("[data-cardid]");
+        allCardHeaders.forEach(function (cardHeader) {
+            cardHeader.addEventListener('focusout', function () {
+                let newTitle = cardHeader.value;
+                let cardId = cardHeader.dataset['cardid'];
+                console.log(newTitle, cardId);
+                dataHandler.changeCardTitle(newTitle, cardId)
+            })
+        })
+    },
+    addEventListenersToAddCardButton: function () {
+        let allButtons = document.querySelectorAll('[data-addcard]');
+        let cardTitle = 'new';
+        let statusId = 0;
+        allButtons.forEach(function (button) {
+            button.addEventListener("click",function(){
+                let boardId = button.dataset['addcard'];
+                console.log(cardTitle, boardId, statusId);
+                dataHandler.createNewCard(cardTitle, boardId, statusId);
+                dom.addCard(boardId);
+            })
 
-
-		}
-
-	},
-
-	theDragula: function () { // listOfDivsWithData as an argument //listOfDivsWithData == [document.getDocumentById(right), .....]
-		dragula([
-			document.getElementById("1"),
-			document.getElementById("3"),
-			document.getElementById("4")
-		], {
-			removeOnSpill: true
-		});
-	},
-
-	addEditListenersToBoardHeaders: function () {
-		let allBoardHeaders = document.querySelectorAll("[data-boardid]");
-		allBoardHeaders.forEach(function (boardHeader) {
-			boardHeader.addEventListener('focusout', function () {
-				let newTitle = boardHeader.value;
-				let boardId = boardHeader.dataset['boardid'];
-				dataHandler.changeBoardTitle(boardId, newTitle)
-			})
-		})
-	},
-
-	addEditListenersToStatusHeaders: function () {
-		let allStatusHeaders = document.querySelectorAll("[data-statusid]");
-		allStatusHeaders.forEach(function (statusHeader) {
-			statusHeader.addEventListener('focusout', function () {
-				let newTitle = statusHeader.value;
-				let statusId = statusHeader.dataset['statusid'];
-				dataHandler.changeStatusTitle(statusId, newTitle)
-			})
-		})
-	},
-
+        })
+    },
+    addCard:function (boardId) {
+        let boardElement = document.querySelector(`[data-columnboardid='${boardId}']`);
+        boardElement.insertAdjacentHTML('beforeend',
+            `<div class="card">
+                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+                            <div class="card-title">new</div>
+                        </div>`
+            );
+    },
 	addBoard: function () {
 		let board = {
 			boardId: 5,
@@ -237,5 +289,5 @@ export let dom = {
 		}
 	}
 
-	// here comes more features
+    // here comes more features
 };

@@ -94,18 +94,31 @@ def change_status_title(status_id, new_title):
     return None
 
 
+@app.route("/change-card-title/<card_id>/<new_title>")
+@json_response
+def change_card_title(card_id, new_title):
+    sql_queries.change_the_title_of_card(card_id, new_title)
+    print(new_title)
+    return None
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == "POST":
         username = request.form['user_name']
-        user_password = sql_queries.get_users_password(username)
-        plain_password = request.form['password']
-        if verify_password(plain_password, user_password):
-            session['user_name'] = username
-            session['password'] = hash_password(request.form['password'])
-            session['logged_in'] = True
-            user_logged_in = True
-            return render_template('index.html', user_logged_in=user_logged_in, username=username)
+        is_in_database = sql_queries.user_is_in_database(username)
+        if is_in_database :
+            plain_password = request.form['password']
+            user_password = sql_queries.get_users_password(username)
+            if verify_password(plain_password, user_password):
+                session['user_name']= username
+                session['password'] = hash_password(request.form['password'])
+                session['logged_in'] = True
+                user_logged_in = True
+                return render_template('index.html', user_logged_in=user_logged_in, username=username)
+            else:
+                incorrect_password_or_login = 'Incorrect password or login'
+                return render_template('login.html', incorrect_password_or_login=incorrect_password_or_login)
         else:
             incorrect_password_or_login = 'Incorrect password or login'
             return render_template('login.html', incorrect_password_or_login=incorrect_password_or_login)
