@@ -87,7 +87,6 @@ export let dataHandler = {
         // creates new card, saves it and calls the callback function with its data
         this._api_get(`/create-new-card/${cardTitle}/${boardId}/${statusId}`, (response)=>{
             this._data = response;
-            callback(response, boardId, statusId);
         })
     },
     changeCardStatus:function (boardId, statusId, cardId, callback) {
@@ -107,6 +106,12 @@ export let dataHandler = {
             
         })
     },
+    changeCardTitle: function (newTitle, cardId) {
+        this._api_get(`/change-card-title/${newTitle}/${cardId}`, (response) => {
+            this._data = response;
+
+        })
+    }
 /*    changeCardPosition:function (boardId, statusId, cardId, callback) {
         this._api_post(`/update-card-position/${boardId}/${statusId}/${cardId}`), (response)=>
 
