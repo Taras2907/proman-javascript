@@ -1,106 +1,100 @@
 // It uses data_handler.js to visualize elements
-import { dataHandler } from "./data_handler.js";
+import {dataHandler} from "./data_handler.js";
 
 export let dom = {
-    _appendToElement: function (elementToExtend, textToAppend, prepend = false) {
-        // function to append new DOM elements (represented by a string) to an existing DOM element
-        let fakeDiv = document.createElement('div');
-        fakeDiv.innerHTML = textToAppend.trim();
+	_appendToElement: function (elementToExtend, textToAppend, prepend = false) {
+		// function to append new DOM elements (represented by a string) to an existing DOM element
+		let fakeDiv = document.createElement('div');
+		fakeDiv.innerHTML = textToAppend.trim();
 
-        for (let childNode of fakeDiv.childNodes) {
-            if (prepend) {
-                elementToExtend.prependChild(childNode);
-            } else {
-                elementToExtend.appendChild(childNode);
-            }
-        }
+		for (let childNode of fakeDiv.childNodes) {
+			if (prepend) {
+				elementToExtend.prependChild(childNode);
+			} else {
+				elementToExtend.appendChild(childNode);
+			}
+		}
 
-        return elementToExtend.lastChild;
-    },
-    init: function () {
-        localStorage.clear();
-        // This function should run once, when the page is loaded.
+		return elementToExtend.lastChild;
+	},
+	init: function () {
+		localStorage.clear()
+		dom.addBoardEventListener()
+		// This function should run once, when the page is loaded.
 
-    },
-    loadBoards: function () {
-        // retrieves boards and makes showBoards called
-        dataHandler.getBoards(function(boards){
-            localStorage.setItem('boards', JSON.stringify(boards));
-            dom.loadCards(function(){
-                dom.showBoards(function(){
-                    dom.showCards()
-                });
-            });
-        });
+	},
 
-    },
-    showBoards: function (callback) {
-        // shows boards appending them to #boards div
-        // it adds necessary event listeners also
-        let boards = JSON.parse(localStorage.getItem('boards'));
+	loadBoards: function () {
+		// retrieves boards and makes showBoards called
 
-        for (let board of boards) {
-            let newBoard = `
-                <section class="board" id="board-${board.id}">
-                    <div class="board-header">
-                    <span class="board-title">
-                    <textarea class="mod-list-name"
-                    spellcheck="false"
-                    data-boardId="${board.id}">${board.title}
-                    </textarea>
-                    </span>
-                        <button class="board-add" data-addcard="${board.id}">Add Card</button>
-                        <button class="board-toggle" 
-                                type="button" 
-                                data-toggle="collapse" 
-                                data-target="#board-${board.id}-columns" 
-                                aria-expanded="false" 
-                                aria-controls="board-${board.id}-columns"><i class="fas fa-chevron-down"></i></button>
-                    </div>
-                    
-                    <div class="board-columns collapse" id="board-${board.id}-columns" data-boardsId ="${board.id}">
-                    
-                    </div>
-                </section>
-                `;
-                this._appendToElement(document.querySelector('#board-container'), newBoard)
-        }
-        dom.addEventListenersToAddCardButton();
+		dataHandler.getBoards(function (boards) {
+			localStorage.setItem('boards', JSON.stringify(boards));
+			dom.loadCards(function () {
+				dom.showBoards(function () {
+					dom.showCards()
+				});
+			});
+		});
 
-        callback()
-    },
-    loadCards: function (callback) {
-        // retrieves cards and makes showCards called
+	},
 
-        const boards = JSON.parse(localStorage.getItem('boards'));
+	showBoards: function (callback) {
+		// shows boards appending them to #boards div
+		// it adds necessary event listeners also
+		let boards = JSON.parse(localStorage.getItem('boards'));
 
-        for (let index=0; index<boards.length; index++) {
+		for (let board of boards) {
+			dom.showNewBoard(board)
+		}
+        dom.addEventListenersToAddCardButton()
+		callback()
+	},
 
-            dataHandler.getCardsByBoardId(parseInt(boards[index].id), function(boardCards) {
-                boards[index].cards = boardCards;
+	loadCards: function (callback) {
+		// retrieves cards and makes showCards called
 
-                if (index === boards.length-1) {
-                    localStorage.setItem('boards', JSON.stringify(boards));
-                    callback()
-                }
-            });
-        }
-    },
-    showCards: function () {
-        // shows the cards of a board
-        // it adds necessary event listeners also
-        let boards = JSON.parse(localStorage.getItem('boards'));
-        dom.addEditListenersToBoardHeaders();
-        for (let board of boards) {
+		const boards = JSON.parse(localStorage.getItem('boards'));
 
-            let newCardList = '';
-            let inProgressCardList = '';
-            let testingCardList = '';
-            let doneCardList = '';
-            for(let card of board.cards) {
-                if (card.status_id === 'new') {
-                    newCardList += `
-                        <div class="card">
+		for (let board of boards) {
+
+			dataHandler.getCardsByBoardId(parseInt(board.id), function (boardCards) {
+
+				board.cards = boardCards;
+
+				if (JSON.parse(JSON.stringify(boards)).every(dom.haveCards)) {
+					localStorage.setItem('boards', JSON.stringify(boards));
+					callback()
+
+				}
+
+				// if (index === boards.length - 1) {
+				// 	//sprawdzić czy kazdy boards[index] posiada .cards wtedy wywolac zapisanie
+				// 	console.log(JSON.parse(JSON.stringify(boards)));
+				// 	localStorage.setItem('boards', JSON.stringify(boards));
+				// 	callback()
+					// dom.saveBoardOnLocalStorage(boards).then(callback())
+				// }
+
+			});
+		}
+	},
+
+	showCards: function () {
+		// shows the cards of a board
+		// it adds necessary event listeners also
+		let boards = JSON.parse(localStorage.getItem('boards'));
+		dom.addEditListenersToBoardHeaders();
+		for (let board of boards) {
+
+			let newCardList = '';
+			let inProgressCardList = '';
+			let testingCardList = '';
+			let doneCardList = '';
+			for (let card of board.cards) {
+
+				if (card.status_id === 'new') {
+					newCardList += `
+                        <div class="card" id="${card.id}">
                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                             <div class="card-title"><textarea 
                             class="mod-list-card"
@@ -109,9 +103,9 @@ export let dom = {
                             </textarea></div>
                         </div>
                         `
-                } else if (card.status_id === 'in progress') {
-                    inProgressCardList += `
-                        <div class="card">
+				} else if (card.status_id === 'in progress') {
+					inProgressCardList += `
+                        <div class="card" id="${card.id}">
                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                             <div class="card-title"><textarea 
                             class="mod-list-card"
@@ -120,9 +114,9 @@ export let dom = {
                             </textarea></div>
                         </div>
                         `
-                } else if (card.status_id === 'testing') {
-                    testingCardList += `
-                        <div class="card">
+				} else if (card.status_id === 'testing') {
+					testingCardList += `
+                        <div class="card" id="${card.id}">
                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                             <div class="card-title"><textarea 
                             class="mod-list-card"
@@ -131,9 +125,9 @@ export let dom = {
                             </textarea></div>
                         </div>
                         `
-                }   else if (card.status_id === 'done') {
-                    doneCardList += `
-                        <div class="card">
+				} else if (card.status_id === 'done') {
+					doneCardList += `
+                        <div class="card" id="${card.id}">
                             <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                             <div class="card-title">
                             <textarea 
@@ -144,12 +138,12 @@ export let dom = {
                             </div>
                         </div>
                         `
-                }
-            }
-                let columns = '';
-                let listOfGroupedCards = [newCardList, inProgressCardList, testingCardList, testingCardList];
-                dataHandler.getBoardStatuses(board.id, listOfGroupedCards, function (statuses ) {
-                for (let status =0; status<statuses.length; status++){
+				}
+			}
+			let columns = '';
+			let listOfGroupedCards = [newCardList, inProgressCardList, testingCardList, testingCardList];
+			dataHandler.getBoardStatuses(board.id, listOfGroupedCards, function (statuses) {
+				for (let status =0; status<statuses.length; status++){
                     columns += `
                 <div class="board-column">
                     <div class="board-column-title">

@@ -64,12 +64,13 @@ def change_card_title(cursor, new_title, the_id):
 
 
 @database_common.connection_handler
-def create_the_new_board(cursor, title, private, user_name):
-    the_id = generate_id('board')
-    user_id = get_user_id(user_name)
+def create_the_new_board(cursor, board):
     cursor.execute('''INSERT INTO board (id, title, private, user_id) 
                                     VALUES (%(the_id)s, %(title)s, %(private)s, %(user_id)s)''',
-                   {'the_id':the_id, 'title':title, 'private':private, 'user_id':user_id})
+                   {'the_id': generate_id('board'),
+                    'title': board['title'],
+                    'private': board['isPrivate'],
+                    'user_id': get_user_id(board['loggedUser'])})
 
 
 @database_common.connection_handler
