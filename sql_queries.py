@@ -169,3 +169,8 @@ def change_the_title_of_board(cursor, board_id, new_title):
     cursor.execute('''UPDATE board SET title = %(new_title)s WHERE id = %(board_id)s''',
                    {'new_title':new_title, 'board_id':board_id})
 
+
+@database_common.connection_handler
+def change_the_title_of_card(cursor, new_title,card_id ):
+    cursor.execute('''UPDATE card SET title = %(new_title)s WHERE id = %(card_id)s''',
+                   {'new_title':new_title, 'card_id':card_id})
