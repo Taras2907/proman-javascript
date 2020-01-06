@@ -1,6 +1,6 @@
 # Proman
 
-Proman is a project similar to Trello, where You can use a web page that stores different tables with statuses and subtasks. After editing, tables are recorded. Every user may create new tables and new subtasks. Each subtask user is able to drag&drop  and so change their statuses, for example from  "to do" to "done". Table headers and subtasks are easily editable. 
+Proman is a project similar to Trello, where You can use a web page that stores different tables with statuses and subtasks. After editing, tables are recorded. Every user may create new tables and new subtasks. User is able to drag&drop each subtask  and so change their statuses, for example from  "to do" to "done" and changes are submitted to database. Table headers and subtasks are easily editable. 
 Tech stack : JAVASCRIPT, FLASK, POSTGRESQL, PYTHON3.
 
 
