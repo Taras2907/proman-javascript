@@ -1,3 +1,3 @@
 # Proman
 
-It is not mandatory but feel free to use the skeleton code which you find in this repo. Also, we provided some design materials, like an example layout; if you like, you can freely use it.
+Proman is project similar to Trello, where You need to create web page that will store different table with statuses. Tasks should be stored in DATABASE (POSTGRE SQL) and every table must have subtasks. Each subtask user may drag&drop from one table to another. 
